@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package name.heikoseeberger.gabbler
+package braambes
 
 import akka.actor.{ ExtendedActorSystem, Extension, ExtensionKey }
 import scala.concurrent.duration.{ Duration, FiniteDuration, MILLISECONDS }
@@ -24,11 +24,11 @@ object Settings extends ExtensionKey[Settings]
 class Settings(system: ExtendedActorSystem) extends Extension {
 
   val hostname: String =
-    system.settings.config getString "gabbler.hostname"
+    system.settings.config getString "braambes.hostname"
 
   val port: Int =
-    system.settings.config getInt "gabbler.port"
+    system.settings.config getInt "braambes.port"
 
   val timeout: FiniteDuration =
-    Duration(system.settings.config getMilliseconds "gabbler.timeout", MILLISECONDS)
+    Duration(system.settings.config getMilliseconds "braambes.timeout", MILLISECONDS)
 }

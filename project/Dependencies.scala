@@ -6,6 +6,7 @@ object Version {
   val logback   = "1.0.13"
   val spray     = "1.2.0"
   val sprayJson = "1.2.5"
+  val framboos  = "0.0.1-SNAPSHOT"
   val scalaTest = "2.0"
 }
 
@@ -17,6 +18,7 @@ object Library {
   val sprayCan       = "io.spray"          %  "spray-can"       % Version.spray
   val sprayRouting   = "io.spray"          %  "spray-routing"   % Version.spray
   val sprayJson      = "io.spray"          %% "spray-json"      % Version.sprayJson
+  val framboos       = "framboos"          %  "framboos"        % Version.framboos
   val scalaTest      = "org.scalatest"     %% "scalatest"       % Version.scalaTest
 }
 
@@ -24,13 +26,14 @@ object Dependencies {
 
   import Library._
 
-  val gabbler = List(
+  val braambes = List(
     akkaActor,
     akkaSlf4j,
     logbackClassic,
     sprayCan,
     sprayRouting,
     sprayJson,
+    framboos,
     scalaTest % "test"
   )
 }

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package name.heikoseeberger.gabbler
+package braambes
 
-import GabblerService.Message
+import BraambesService.Message
 import akka.actor.{ Actor, FSM, Props }
 import scala.concurrent.duration.FiniteDuration
 
-object Gabbler {
+object Braambes {
 
   type Completer = Seq[Message] => Unit
 
@@ -35,13 +35,13 @@ object Gabbler {
   private case object Timeout
 
   def props(timeoutDuration: FiniteDuration): Props =
-    Props(new Gabbler(timeoutDuration))
+    Props(new Braambes(timeoutDuration))
 }
 
-import Gabbler._
+import Braambes._
 import State._
 
-final class Gabbler(timeoutDuration: FiniteDuration) extends Actor with FSM[State, (Option[Completer], Seq[Message])] {
+final class Braambes(timeoutDuration: FiniteDuration) extends Actor with FSM[State, (Option[Completer], Seq[Message])] {
 
   startWith(Waiting, (None, Nil))
 

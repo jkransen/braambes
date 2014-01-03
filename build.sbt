@@ -1,12 +1,12 @@
-organization := "name.heikoseeberger"
+organization := "framboos"
 
-name := "gabbler"
+name := "braambes"
 
-version := "2.0.0"
+version := "0.0.1-SNAPSHOT"
 
 scalaVersion := Version.scala
 
-libraryDependencies ++= Dependencies.gabbler
+libraryDependencies ++= Dependencies.braambes
 
 unmanagedSourceDirectories in Compile := List((scalaSource in Compile).value)
 
@@ -20,4 +20,4 @@ scalacOptions ++= List(
   "-encoding", "UTF-8"
 )
 
-initialCommands := "import name.heikoseeberger.gabbler._"
+initialCommands := "import braambes._"

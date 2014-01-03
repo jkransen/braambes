@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package name.heikoseeberger.gabbler
+package braambes
 
 import akka.actor.{ ActorLogging, ActorRef, Props }
 import akka.io.IO
@@ -26,7 +26,7 @@ import spray.json.DefaultJsonProtocol
 import spray.routing.{ HttpServiceActor, Route }
 import spray.routing.authentication.BasicAuth
 
-object GabblerService {
+object BraambesService {
 
   object Message extends DefaultJsonProtocol {
     implicit val format = jsonFormat2(apply)
@@ -35,13 +35,13 @@ object GabblerService {
   case class Message(username: String, text: String)
 
   def props(hostname: String, port: Int, timeout: FiniteDuration): Props =
-    Props(new GabblerService(hostname, port, timeout))
+    Props(new BraambesService(hostname, port, timeout))
 }
 
-class GabblerService(hostname: String, port: Int, timeout: FiniteDuration) extends HttpServiceActor
+class BraambesService(hostname: String, port: Int, timeout: FiniteDuration) extends HttpServiceActor
     with ActorLogging with SprayJsonSupport {
 
-  import GabblerService._
+  import BraambesService._
   import context.dispatcher
 
   IO(Http)(context.system) ! Http.Bind(self, hostname, port) // For details see my blog post http://goo.gl/XwOv7P
@@ -51,13 +51,13 @@ class GabblerService(hostname: String, port: Int, timeout: FiniteDuration) exten
 
   def apiRoute: Route =
     // format: OFF
-    authenticate(BasicAuth(UsernameEqualsPasswordAuthenticator, "Gabbler")) { user =>
+    authenticate(BasicAuth(UsernameEqualsPasswordAuthenticator, "Braambes")) { user =>
       pathPrefix("api") {
         path("messages") {
           get {
             produce(instanceOf[Seq[Message]]) { completer => _ =>
               log.debug("User {} is asking for messages ...", user.username)
-              gabblerFor(user.username) ! completer
+              braambesFor(user.username) ! completer
             }
           } ~
           post {
@@ -89,6 +89,6 @@ class GabblerService(hostname: String, port: Int, timeout: FiniteDuration) exten
     } ~
     getFromResourceDirectory("web") // format: ON
 
-  def gabblerFor(username: String): ActorRef =
-    context.child(username) getOrElse context.actorOf(Gabbler.props(timeout), username)
+  def braambesFor(username: String): ActorRef =
+    context.child(username) getOrElse context.actorOf(Braambes.props(timeout), username)
 }

@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package name.heikoseeberger
+package braambes
 
-package object gabbler {
+import scala.concurrent.{ Future, Promise }
+import spray.routing.authentication.{ BasicUserContext, UserPass, UserPassAuthenticator }
 
-  type Traversable[+A] = scala.collection.immutable.Traversable[A]
+object UsernameEqualsPasswordAuthenticator extends UserPassAuthenticator[BasicUserContext] {
 
-  type Iterable[+A] = scala.collection.immutable.Iterable[A]
-
-  type Seq[+A] = scala.collection.immutable.Seq[A]
-
-  type IndexedSeq[+A] = scala.collection.immutable.IndexedSeq[A]
+  override def apply(userPass: Option[UserPass]): Future[Option[BasicUserContext]] = {
+    val basicUserContext =
+      userPass flatMap {
+        case UserPass(username, password) if username == password => Some(BasicUserContext(username))
+        case _ => None
+      }
+    Promise.successful(basicUserContext).future
+  }
 }

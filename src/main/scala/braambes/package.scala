@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package name.heikoseeberger.gabbler
+package braambes
 
-import akka.actor.ActorSystem
-import scala.util.Properties.{ lineSeparator => newLine }
+package object braambes {
 
-object GabblerServiceApp extends App {
+  type Traversable[+A] = scala.collection.immutable.Traversable[A]
 
-  val system = ActorSystem("gabbler-service-system")
+  type Iterable[+A] = scala.collection.immutable.Iterable[A]
 
-  val hostname = Settings(system).hostname
-  val port = Settings(system).port
-  val timeout = Settings(system).timeout
-  system.actorOf(GabblerService.props(hostname, port, timeout), "gabbler-service")
+  type Seq[+A] = scala.collection.immutable.Seq[A]
 
-  system.awaitTermination()
+  type IndexedSeq[+A] = scala.collection.immutable.IndexedSeq[A]
 }

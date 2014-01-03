@@ -1,32 +1,24 @@
-# Gabbler #
+# Braambes #
 
-Gabbler is a simple push-enabled chat application showcasing a modern and reactive web application: an interactive client based on [AngularJS](http://angularjs.org) and a scalable and resilient RESTful server written in [Scala](http://www.scala-lang.org), [Akka](http://akka.io) and [spray](http://spray.io).
+Braambes is a push-enabled, reactive web application accessing and controlling low-level I/O on Raspberry Pi and (hopefully) similar boards like BeagleBoard. It has an interactive client based on [AngularJS](http://angularjs.org) and a scalable and resilient RESTful server written in [Scala](http://www.scala-lang.org), [Akka](http://akka.io) and [Spray](http://spray.io). It is based on (and forked from) [Gabbler](http://github.com/hseeberger/gabbler) and uses the more low-level [Framboos](http://github.com/jkransen/framboos) GPIO/UART library.
 
-For details check out the [Gabbler, a reactive chat app – part 1](http://hseeberger.github.io/blog/2013/07/08/gabbler-part1/) blog post and its follow-ups.
+## Running Braambes ##
 
-Huge thanks to Mathias Doenitz from the spray team for his help and contributions!
+As its dependency Framboos is not yet released, you first need to download and install it from [Github](http://github.com/jkransen/framboos).
 
-## Running Gabbler ##
+If, like me, you are developing from Scala IDE, you may want to run `sbt eclipse` to turn your repo into an Eclipse project you can import.
 
-Clone this repository, `cd` into it and start [sbt](http://www.scala-sbt.org). Then simply execute `run` to start the Gabbler server:
+This is the script that I run to install and deploy the code to my Raspberry Pi:
 
 ```
-gabbler$ sbt
-[info] ...
-[info] Set current project to gabbler (in build file:/Users/heiko/projects/gabbler/)
-> run
-[info] Running name.heikoseeberger.gabbler.GabblerServerApp
+rm -rf ~/.ivy2/cache/framboos/framboos/
+cd ../framboos
+mvn install
+cd -
+sbt assembly && rsync -av target/scala-2.10/braambes.jar pi@pi:
 ```
 
-Open a browser and point it to [localhost:8080/](http://localhost:8080/). Use the same value for username and password, e.g. "John" and "John".
-
-Enter a message in the text area on the left, click the "Gabble away" button and watch the message appear on the right.
-
-Open a second browser window which needs to be a different application if you want to use a separate login (e.g. first Safari, second Chrome), enter another message and watch it appear in both browser windows.
-
-## Contribution policy ##
-
-Contributions via GitHub pull requests are gladly accepted from their original author. Along with any pull requests, please state that the contribution is your original work and that you license the work to the project under the project's open source license. Whether or not you state this explicitly, by submitting any copyrighted material via pull request, email, or other means you agree to license the material under the project's open source license and warrant that you have the legal authority to do so.
+Open a browser and point it to [pi:8080/](http://pi:8080/). Use the same value for username and password, e.g. "John" and "John".
 
 ## License ##
 

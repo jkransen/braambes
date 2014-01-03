@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package name.heikoseeberger.gabbler
+package braambes
 
-import scala.concurrent.{ Future, Promise }
-import spray.routing.authentication.{ BasicUserContext, UserPass, UserPassAuthenticator }
+import akka.actor.ActorSystem
+import scala.util.Properties.{ lineSeparator => newLine }
 
-object UsernameEqualsPasswordAuthenticator extends UserPassAuthenticator[BasicUserContext] {
+object BraambesServiceApp extends App {
 
-  override def apply(userPass: Option[UserPass]): Future[Option[BasicUserContext]] = {
-    val basicUserContext =
-      userPass flatMap {
-        case UserPass(username, password) if username == password => Some(BasicUserContext(username))
-        case _ => None
-      }
-    Promise.successful(basicUserContext).future
-  }
+  val system = ActorSystem("braambes-service-system")
+
+  val hostname = Settings(system).hostname
+  val port = Settings(system).port
+  val timeout = Settings(system).timeout
+  system.actorOf(BraambesService.props(hostname, port, timeout), "braambes-service")
+
+  system.awaitTermination()
 }

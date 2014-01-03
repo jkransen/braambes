@@ -6,7 +6,7 @@
     </encoder>
   </appender>
 
-  <logger name="name.heikoseeberger.gabbler" level="debug" additivity="false">
+  <logger name="braambes" level="debug" additivity="false">
     <appender-ref ref="console" />
   </logger>
 
