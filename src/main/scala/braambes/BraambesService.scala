@@ -44,6 +44,8 @@ class BraambesService(hostname: String, port: Int, timeout: FiniteDuration) exte
   import BraambesService._
   import context.dispatcher
 
+  val braambes = context.actorOf(Props[Braambes], "braambes")
+
   IO(Http)(context.system) ! Http.Bind(self, hostname, port) // For details see my blog post http://goo.gl/XwOv7P
 
   override def receive: Receive =
