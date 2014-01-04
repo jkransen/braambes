@@ -20,7 +20,7 @@ import BraambesService.Message
 import akka.actor.{ Actor, FSM, Props }
 import scala.concurrent.duration.FiniteDuration
 
-object Braambes {
+object Gabbler {
 
   type Completer = Seq[Message] => Unit
 
@@ -35,13 +35,13 @@ object Braambes {
   private case object Timeout
 
   def props(timeoutDuration: FiniteDuration): Props =
-    Props(new Braambes(timeoutDuration))
+    Props(new Gabbler(timeoutDuration))
 }
 
-import Braambes._
+import Gabbler._
 import State._
 
-final class Braambes(timeoutDuration: FiniteDuration) extends Actor with FSM[State, (Option[Completer], Seq[Message])] {
+final class Gabbler(timeoutDuration: FiniteDuration) extends Actor with FSM[State, (Option[Completer], Seq[Message])] {
 
   startWith(Waiting, (None, Nil))
 

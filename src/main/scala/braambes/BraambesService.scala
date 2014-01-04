@@ -57,7 +57,7 @@ class BraambesService(hostname: String, port: Int, timeout: FiniteDuration) exte
           get {
             produce(instanceOf[Seq[Message]]) { completer => _ =>
               log.debug("User {} is asking for messages ...", user.username)
-              braambesFor(user.username) ! completer
+              gabblerFor(user.username) ! completer
             }
           } ~
           post {
@@ -89,6 +89,6 @@ class BraambesService(hostname: String, port: Int, timeout: FiniteDuration) exte
     } ~
     getFromResourceDirectory("web") // format: ON
 
-  def braambesFor(username: String): ActorRef =
-    context.child(username) getOrElse context.actorOf(Braambes.props(timeout), username)
+  def gabblerFor(username: String): ActorRef =
+    context.child(username) getOrElse context.actorOf(Gabbler.props(timeout), username)
 }
