@@ -6,6 +6,10 @@ version := "0.0.1-SNAPSHOT"
 
 scalaVersion := Version.scala
 
+resolvers ++= Seq(
+      "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository"
+)
+
 libraryDependencies ++= Dependencies.braambes
 
 unmanagedSourceDirectories in Compile := List((scalaSource in Compile).value)
@@ -23,3 +27,4 @@ scalacOptions ++= List(
 // initialCommands := "import braambes._"
 
 EclipseKeys.withSource := true
+
