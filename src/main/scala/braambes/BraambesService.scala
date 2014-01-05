@@ -42,9 +42,10 @@ class BraambesService(hostname: String, port: Int, timeout: FiniteDuration) exte
     with ActorLogging with SprayJsonSupport {
 
   import BraambesService._
+  import Distributor._
   import context.dispatcher
 
-  val braambes = context.actorOf(Props[Braambes], "braambes")
+  val distributor = context.actorOf(Distributor.props(timeout), "distributor")
 
   IO(Http)(context.system) ! Http.Bind(self, hostname, port) // For details see my blog post http://goo.gl/XwOv7P
 
@@ -59,14 +60,14 @@ class BraambesService(hostname: String, port: Int, timeout: FiniteDuration) exte
           get {
             produce(instanceOf[Seq[Message]]) { completer => _ =>
               log.debug("User {} is asking for messages ...", user.username)
-              gabblerFor(user.username) ! completer
+              distributor ! CompleteToGabbler(user.username, completer)
             }
           } ~
           post {
             entity(as[Message]) { message =>
               complete {
                 log.debug("User '{}' has posted '{}'", user.username, message.text)
-                context.children foreach (_ ! message)
+                distributor ! message
                 StatusCodes.NoContent
               }
             }
@@ -90,7 +91,4 @@ class BraambesService(hostname: String, port: Int, timeout: FiniteDuration) exte
       getFromResource("web/index.html")
     } ~
     getFromResourceDirectory("web") // format: ON
-
-  def gabblerFor(username: String): ActorRef =
-    context.child(username) getOrElse context.actorOf(Gabbler.props(timeout), username)
 }

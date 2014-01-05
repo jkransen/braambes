@@ -20,4 +20,6 @@ scalacOptions ++= List(
   "-encoding", "UTF-8"
 )
 
-initialCommands := "import braambes._"
+// initialCommands := "import braambes._"
+
+EclipseKeys.withSource := true

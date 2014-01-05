@@ -19,7 +19,7 @@ class Braambes extends Actor with ActorLogging {
   var currentValue = false
 
   def receive: Receive = {
-    case Message(user, message) => {
+    case Message(user: String, message: String) => {
       log.debug(s"Gabbler $user sent message: $message")
       serialPort ! SendMessage(s"$user: $message")
       currentValue = !currentValue
@@ -34,7 +34,7 @@ class Braambes extends Actor with ActorLogging {
       context.parent ! Message("braambes", message)
     }
     case other => {
-      log.debug(s"other message of type: ${other.getClass()} value ${other.toString()}")
+      log.debug(s"other message of type: ${other.getClass()} value ${other.toString()} from ${sender}")
     }
   }
 }
